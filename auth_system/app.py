@@ -17,12 +17,16 @@ def prompt_choice() -> str:
     print(
         dedent(
             """
-            === Secure Login & Authentication System ===
-            1) Register
-            2) Login
-            3) Exit
+            ╭──────────────────────────────────────────╮
+            │   Secure Login & Authentication System   │
+            │──────────────────────────────────────────│
+            │1) Register                               │
+            │2) Login                                  │
+            │3) Exit                                   │
+            ╰──────────────────────────────────────────╯
             """
         ).strip()
+    )
     return input("Choose an option: ").strip()
 
 
@@ -62,9 +66,17 @@ def register_user() -> None:
         return
 
     print("\nRegistration successful!")
-    print("Store this TOTP secret in your authenticator app:")
-    print(f"  {totp_secret}")
-    print("Use the app to generate 6-digit codes during login.\n")
+    print(
+        dedent(
+            f"""
+            ╭───────────────────────────────────────────────────╮
+            │Store this TOTP secret in your authenticator app:  │
+            │  {totp_secret}                 │
+            │Use the app to generate 6-digit codes during login.│
+            ╰───────────────────────────────────────────────────╯
+            """
+        ).strip()
+    )
 
 
 def login_user() -> None:
