@@ -46,7 +46,7 @@ python -m unittest discover tests
 ## Project Structure
 ```
 auth_system/
-  app.py           # Interactive CLI for register/login
+  app.py           # Interactive GUI for register/login
   crypto.py        # Password hashing and TOTP helpers
   database.py      # SQLite helpers with safe defaults
 report/
