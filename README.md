@@ -1,6 +1,6 @@
 # Secure Login & User Authentication System
 
-This repository contains a minimal interactive authentication CLI demonstrating secure coding practices, password hashing, TOTP-based multi-factor authentication (MFA), and protections against common vulnerabilities such as SQL injection.
+This repository contains a minimal interactive authentication GUI demonstrating secure coding practices, password hashing, TOTP-based multi-factor authentication (MFA), and protections against common vulnerabilities such as SQL injection.
 
 ## Features
 - **Password hashing** with salted PBKDF2-HMAC-SHA256.
@@ -24,7 +24,7 @@ This repository contains a minimal interactive authentication CLI demonstrating 
    ```bash
    python -m auth_system.app
    ```
-   The CLI will initialize `auth.db` in the project root and guide you through registration and login with MFA.
+   The GUI will initialize `auth.db` in the project root and guide you through registration and login with MFA.
 
 ### Usage Tips
 - During registration, you will be shown a **Base32 TOTP secret**. Add it to an authenticator app (e.g., Authy, Google Authenticator) to generate login codes.
@@ -46,7 +46,7 @@ python -m unittest discover tests
 ## Project Structure
 ```
 auth_system/
-  app.py           # Interactive CLI for register/login
+  app.py           # Interactive GUI for register/login
   crypto.py        # Password hashing and TOTP helpers
   database.py      # SQLite helpers with safe defaults
 report/
