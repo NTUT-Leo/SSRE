@@ -12,6 +12,7 @@
 - Database layer (`database.py`) initialized with safe pragmas; all queries parameterized.
 - Crypto layer (`crypto.py`) handles salts, hashing, Base32 secrets, and TOTP generation/verification.
 - App layer (`app.py`) validates input, limits error leakage, and logs security-relevant events.
+- Test module (`test.py`) provides comprehensive security testing with colored output.
 - Data stored locally in `auth.db` (username, hashed credentials, TOTP secret, timestamps).
 
 ---
@@ -20,6 +21,7 @@
 - **Password hashing:** PBKDF2-HMAC-SHA256 with 16-byte random salts and 120k iterations.
 - **MFA:** RFC 6238-compliant 6-digit TOTPs validated with constant-time comparison and ±1 interval drift allowance.
 - **SQL injection:** SQLite URI in restricted mode plus parameterized statements; no string interpolation.
+- **XSS prevention:** Input validation and proper encoding to prevent cross-site scripting attacks.
 - **Secret handling:** Passwords read via `getpass`, never logged; TOTP secrets shown once at registration.
 - **Input validation:** Username non-empty, passwords >=8 chars, TOTP numeric/length checked.
 - **Operational security:** Minimal error messages, structured logging, easily rotated database (`auth.db`).
@@ -27,10 +29,13 @@
 ---
 
 ## Slide 4 – Testing & Verification
-- Unit tests (`python -m unittest discover tests`) cover:
-  - PBKDF2 hashing and verify path.
-  - TOTP generation/verification including drift window.
-  - End-to-end register/login happy path with in-memory DB isolation.
+- Run tests: `python -m auth_system.test`
+- Test coverage includes:
+  - **Hashing:** PBKDF2 password hashing and verification.
+  - **MFA:** TOTP generation/verification including drift window.
+  - **End-to-end:** Complete register/login flow with isolated temp DB.
+  - **SQL Injection:** Malicious query attempts are safely handled.
+  - **XSS Prevention:** Script injection payloads are properly sanitized.
 - Manual checks:
   - Attempt login with wrong password/OTP to confirm rejection.
   - Inspect `auth.db` to verify hashed credentials and secrets are not plaintext.

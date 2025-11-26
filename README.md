@@ -1,13 +1,14 @@
 # Secure Login & User Authentication System
 
-This repository contains a minimal interactive authentication GUI demonstrating secure coding practices, password hashing, TOTP-based multi-factor authentication (MFA), and protections against common vulnerabilities such as SQL injection.
+This repository contains a minimal interactive authentication GUI demonstrating secure coding practices, password hashing, TOTP-based multi-factor authentication (MFA), and protections against common vulnerabilities such as SQL injection and XSS.
 
 ## Features
 - **Password hashing** with salted PBKDF2-HMAC-SHA256.
 - **TOTP MFA** compatible with authenticator apps (RFC 6238, 6-digit codes).
 - **SQLite storage** using parameterized queries to mitigate SQL injection.
+- **XSS prevention** with input validation and proper encoding.
 - **Input validation** for safe user handling and structured logging for observability.
-- **Security testing** via unit tests that cover hashing, TOTP generation/verification, and login flows.
+- **Security testing** with colored output covering hashing, TOTP, SQL injection, and XSS prevention.
 
 ## Getting Started
 ### Requirements
@@ -35,13 +36,21 @@ This repository contains a minimal interactive authentication GUI demonstrating 
 - **Credential handling:** Passwords are never stored or logged. Hashing uses 120k PBKDF2 iterations with random salts.
 - **MFA verification:** TOTP codes are validated using constant-time comparisons with a small time window to tolerate clock drift.
 - **SQL injection prevention:** All database operations use parameterized queries and a restricted SQLite URI.
+- **XSS prevention:** Input validation and encoding to prevent cross-site scripting attacks.
 - **Error handling:** Minimal error messages avoid revealing sensitive details.
 
 ## Testing
-Run unit tests to validate cryptographic helpers and authentication logic:
+Run security tests with colored output:
 ```bash
-python -m unittest discover tests
+python -m auth_system.test
 ```
+
+Test coverage includes:
+- Password hashing and verification
+- TOTP generation and verification
+- End-to-end login flow
+- SQL injection prevention
+- XSS prevention
 
 ## Project Structure
 ```
@@ -49,6 +58,7 @@ auth_system/
   app.py           # Interactive GUI for register/login
   crypto.py        # Password hashing and TOTP helpers
   database.py      # SQLite helpers with safe defaults
+  test.py          # Security tests with colored output
 report/
   report.md        # Slide-style design and testing summary
 ```
