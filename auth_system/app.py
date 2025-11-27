@@ -1,10 +1,10 @@
-"""Interactive secure login and registration GUI using tkinter."""
+"""Interactive secure login and registration GUI using CustomTkinter."""
 
 from __future__ import annotations
 
 import logging
-import tkinter as tk
-from tkinter import messagebox, ttk
+import customtkinter as ctk
+from tkinter import messagebox
 from pathlib import Path
 
 from . import crypto, database
@@ -12,12 +12,16 @@ from . import crypto, database
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
+# Set appearance mode and default color theme
+ctk.set_appearance_mode("dark")  # Options: "System", "Dark", "Light"
+ctk.set_default_color_theme("blue")  # Options: "blue", "green", "dark-blue"
+
 
 class AuthApp:
-    def __init__(self, root: tk.Tk):
+    def __init__(self, root: ctk.CTk):
         self.root = root
         self.root.title("Secure Login & Authentication System")
-        self.root.geometry("350x240")
+        self.root.geometry("400x360")
         self.root.resizable(False, False)
         self.center_window(self.root)
         
@@ -27,8 +31,8 @@ class AuthApp:
         logger.info("Database located at %s", db_path)
         
         # Create main frame with top center alignment
-        self.main_frame = ttk.Frame(root, padding="20")
-        self.main_frame.place(relx=0.5, rely=0, anchor=tk.N)
+        self.main_frame = ctk.CTkFrame(root, corner_radius=15)
+        self.main_frame.pack(pady=20, padx=20, fill="both", expand=True)
         
         self.show_main_menu()
     
@@ -37,8 +41,8 @@ class AuthApp:
         for widget in self.main_frame.winfo_children():
             widget.destroy()
     
-    def center_window(self, window: tk.Tk | tk.Toplevel):
-        """Center a window (Tk or Toplevel) on the screen."""
+    def center_window(self, window: ctk.CTk | ctk.CTkToplevel):
+        """Center a window (CTk or CTkToplevel) on the screen."""
         window.update_idletasks()
         width = window.winfo_width()
         height = window.winfo_height()
@@ -50,84 +54,127 @@ class AuthApp:
         """Display the main menu."""
         self.clear_frame()
         
-        title = ttk.Label(
+        title = ctk.CTkLabel(
             self.main_frame,
-            text="Secure Login & Authentication",
-            font=("Arial", 14, "bold")
+            text="🔐 Secure Login & Authentication",
+            font=ctk.CTkFont(size=18, weight="bold")
         )
-        title.grid(row=0, column=0, columnspan=2, pady=(0, 30))
+        title.pack(pady=(20, 40))
         
-        register_btn = ttk.Button(
+        register_btn = ctk.CTkButton(
             self.main_frame,
-            text="Register",
+            text="📝 Register",
             command=self.show_register_form,
-            width=20
+            width=200,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14)
         )
-        register_btn.grid(row=1, column=0, columnspan=2, pady=8)
+        register_btn.pack(pady=10)
         
-        login_btn = ttk.Button(
+        login_btn = ctk.CTkButton(
             self.main_frame,
-            text="Login",
+            text="🔑 Login",
             command=self.show_login_form,
-            width=20
+            width=200,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14)
         )
-        login_btn.grid(row=2, column=0, columnspan=2, pady=8)
+        login_btn.pack(pady=10)
         
-        exit_btn = ttk.Button(
+        exit_btn = ctk.CTkButton(
             self.main_frame,
-            text="Exit",
+            text="🚪 Exit",
             command=self.root.quit,
-            width=20
+            width=200,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#E74C3C",
+            hover_color="#C0392B"
         )
-        exit_btn.grid(row=3, column=0, columnspan=2, pady=8)
+        exit_btn.pack(pady=10)
     
     def show_register_form(self):
         """Display the registration form."""
         self.clear_frame()
         
-        title = ttk.Label(
+        title = ctk.CTkLabel(
             self.main_frame,
-            text="Register New Account",
-            font=("Arial", 14, "bold")
+            text="📝 Register New Account",
+            font=ctk.CTkFont(size=18, weight="bold")
         )
-        title.grid(row=0, column=0, columnspan=2, pady=(0, 20))
+        title.pack(pady=(20, 15))
         
         # Username
-        ttk.Label(self.main_frame, text="Username:").grid(row=1, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        username_entry = ttk.Entry(self.main_frame, width=25)
-        username_entry.grid(row=1, column=1, pady=5)
+        username_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="Username",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        username_entry.pack(pady=8)
         
         # Password
-        ttk.Label(self.main_frame, text="Password:").grid(row=2, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        password_entry = ttk.Entry(self.main_frame, show="*", width=25)
-        password_entry.grid(row=2, column=1, pady=5)
+        password_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="Password",
+            show="●",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        password_entry.pack(pady=8)
         
         # Confirm Password
-        ttk.Label(self.main_frame, text="Confirm:").grid(row=3, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        confirm_entry = ttk.Entry(self.main_frame, show="*", width=25)
-        confirm_entry.grid(row=3, column=1, pady=5)
+        confirm_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="Confirm Password",
+            show="●",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        confirm_entry.pack(pady=8)
         
-        # Buttons
-        btn_frame = ttk.Frame(self.main_frame)
-        btn_frame.grid(row=4, column=0, columnspan=2, pady=(25, 0))
+        # Buttons frame
+        btn_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
+        btn_frame.pack(pady=(20, 0))
         
-        submit_btn = ttk.Button(
+        submit_btn = ctk.CTkButton(
             btn_frame,
-            text="Register",
+            text="✓ Register",
             command=lambda: self.register_user(
                 username_entry.get(),
                 password_entry.get(),
                 confirm_entry.get()
-            )
+            ),
+            width=130,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#27AE60",
+            hover_color="#1E8449"
         )
-        submit_btn.grid(row=0, column=0, padx=5)
+        submit_btn.pack(side="left", padx=5)
         
-        back_btn = ttk.Button(
+        back_btn = ctk.CTkButton(
             btn_frame,
-            text="Back",
-            command=self.show_main_menu
+            text="← Back",
+            command=self.show_main_menu,
+            width=130,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#7F8C8D",
+            hover_color="#5D6D7E"
         )
-        back_btn.grid(row=0, column=1, padx=5)
+        back_btn.pack(side="left", padx=5)
         
         username_entry.focus()
     
@@ -167,78 +214,88 @@ class AuthApp:
     
     def show_totp_secret_dialog(self, totp_secret: str):
         """Display TOTP secret in a dialog with copy functionality."""
-        dialog = tk.Toplevel(self.root)
+        dialog = ctk.CTkToplevel(self.root)
         dialog.title("Registration Successful")
-        dialog.geometry("350x230")
+        dialog.geometry("400x320")
         dialog.resizable(False, False)
-        self.center_window(dialog)
+        
+        # Wait for the window to be created before centering
+        dialog.after(100, lambda: self.center_window(dialog))
         dialog.transient(self.root)
         dialog.grab_set()
         
-        frame = ttk.Frame(dialog, padding="20")
-        frame.pack(fill=tk.BOTH, expand=True)
+        frame = ctk.CTkFrame(dialog, corner_radius=15)
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Success message
-        ttk.Label(
+        ctk.CTkLabel(
             frame,
-            text="Registration Successful !",
-            font=("Arial", 14, "bold")
-        ).pack(pady=(0, 10))
+            text="✅ Registration Successful!",
+            font=ctk.CTkFont(size=18, weight="bold"),
+            text_color="#27AE60"
+        ).pack(pady=(20, 15))
         
-        ttk.Label(
+        ctk.CTkLabel(
             frame,
             text="Store this TOTP secret in your authenticator app:",
-            wraplength=400
-        ).pack(pady=(0, 10))
+            font=ctk.CTkFont(size=13),
+            wraplength=380
+        ).pack(pady=8)
         
-        # TOTP secret display (readonly text widget for easy selection)
-        secret_frame = ttk.Frame(frame)
-        secret_frame.pack(pady=10, fill=tk.X)
+        # TOTP secret display
+        secret_frame = ctk.CTkFrame(frame, fg_color="#2C3E50", corner_radius=10)
+        secret_frame.pack(pady=5, padx=40, fill="x")
         
-        secret_text = tk.Text(
+        secret_label = ctk.CTkLabel(
             secret_frame,
-            height=1,
-            width=32,
-            font=("Courier", 11, "bold"),
-            wrap=tk.WORD,
-            relief=tk.SOLID,
-            borderwidth=1
+            text=totp_secret,
+            font=ctk.CTkFont(family="Courier", size=14, weight="bold"),
+            text_color="#F1C40F"
         )
-        secret_text.pack()
-        secret_text.insert("1.0", totp_secret)
-        secret_text.config(state=tk.DISABLED)
+        secret_label.pack(pady=10, padx=10)
         
         # Instructions
-        ttk.Label(
+        ctk.CTkLabel(
             frame,
             text="Use the app to generate 6-digit codes during login.",
-            wraplength=400
-        ).pack(pady=(10, 10))
+            font=ctk.CTkFont(size=13),
+            wraplength=380
+        ).pack(pady=8)
         
         # Buttons
-        btn_frame = ttk.Frame(frame)
-        btn_frame.pack(pady=10)
+        btn_frame = ctk.CTkFrame(frame, fg_color="transparent")
+        btn_frame.pack(pady=5)
         
         def copy_to_clipboard():
             dialog.clipboard_clear()
             dialog.clipboard_append(totp_secret)
             dialog.update()
-            copy_btn.config(text="✓ Copied!")
-            dialog.after(2000, lambda: copy_btn.config(text="Copy to Clipboard"))
+            copy_btn.configure(text="✓ Copied!")
+            dialog.after(2000, lambda: copy_btn.configure(text="📋 Copy to Clipboard"))
         
-        copy_btn = ttk.Button(
+        copy_btn = ctk.CTkButton(
             btn_frame,
-            text="Copy to Clipboard",
-            command=copy_to_clipboard
+            text="📋 Copy to Clipboard",
+            command=copy_to_clipboard,
+            width=150,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14)
         )
-        copy_btn.pack(side=tk.LEFT, padx=5)
+        copy_btn.pack(side="left", padx=5)
         
-        close_btn = ttk.Button(
+        close_btn = ctk.CTkButton(
             btn_frame,
-            text="Close",
-            command=dialog.destroy
+            text="✕ Close",
+            command=dialog.destroy,
+            width=100,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#7F8C8D",
+            hover_color="#5D6D7E"
         )
-        close_btn.pack(side=tk.LEFT, padx=5)
+        close_btn.pack(side="left", padx=5)
         
         # Wait for dialog to close
         self.root.wait_window(dialog)
@@ -247,49 +304,80 @@ class AuthApp:
         """Display the login form."""
         self.clear_frame()
         
-        title = ttk.Label(
+        title = ctk.CTkLabel(
             self.main_frame,
-            text="Login",
-            font=("Arial", 14, "bold")
+            text="🔑 Login",
+            font=ctk.CTkFont(size=18, weight="bold")
         )
-        title.grid(row=0, column=0, columnspan=2, pady=(0, 20))
+        title.pack(pady=(20, 15))
         
         # Username
-        ttk.Label(self.main_frame, text="Username:").grid(row=1, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        username_entry = ttk.Entry(self.main_frame, width=25)
-        username_entry.grid(row=1, column=1, pady=5)
+        username_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="Username",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        username_entry.pack(pady=8)
         
         # Password
-        ttk.Label(self.main_frame, text="Password:").grid(row=2, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        password_entry = ttk.Entry(self.main_frame, show="*", width=25)
-        password_entry.grid(row=2, column=1, pady=5)
+        password_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="Password",
+            show="●",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        password_entry.pack(pady=8)
         
         # TOTP Code
-        ttk.Label(self.main_frame, text="TOTP Code:").grid(row=3, column=0, sticky=tk.W, pady=5, padx=(0, 10))
-        totp_entry = ttk.Entry(self.main_frame, width=25)
-        totp_entry.grid(row=3, column=1, pady=5)
+        totp_entry = ctk.CTkEntry(
+            self.main_frame,
+            placeholder_text="TOTP Code (6 digits)",
+            width=280,
+            height=40,
+            corner_radius=10,
+            font=ctk.CTkFont(size=13)
+        )
+        totp_entry.pack(pady=8)
         
-        # Buttons
-        btn_frame = ttk.Frame(self.main_frame)
-        btn_frame.grid(row=4, column=0, columnspan=2, pady=(25, 0))
+        # Buttons frame
+        btn_frame = ctk.CTkFrame(self.main_frame, fg_color="transparent")
+        btn_frame.pack(pady=(20, 0))
         
-        login_btn = ttk.Button(
+        login_btn = ctk.CTkButton(
             btn_frame,
-            text="Login",
+            text="🔓 Login",
             command=lambda: self.login_user(
                 username_entry.get(),
                 password_entry.get(),
                 totp_entry.get()
-            )
+            ),
+            width=130,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#27AE60",
+            hover_color="#1E8449"
         )
-        login_btn.grid(row=0, column=0, padx=5)
+        login_btn.pack(side="left", padx=5)
         
-        back_btn = ttk.Button(
+        back_btn = ctk.CTkButton(
             btn_frame,
-            text="Back",
-            command=self.show_main_menu
+            text="← Back",
+            command=self.show_main_menu,
+            width=130,
+            height=38,
+            corner_radius=10,
+            font=ctk.CTkFont(size=14),
+            fg_color="#7F8C8D",
+            hover_color="#5D6D7E"
         )
-        back_btn.grid(row=0, column=1, padx=5)
+        back_btn.pack(side="left", padx=5)
         
         username_entry.focus()
     
@@ -335,7 +423,7 @@ class AuthApp:
 
 def main() -> None:
     """Launch the GUI application."""
-    root = tk.Tk()
+    root = ctk.CTk()
     app = AuthApp(root)
     root.mainloop()
 

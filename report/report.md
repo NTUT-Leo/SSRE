@@ -2,13 +2,13 @@
 
 ## Slide 1 – Overview
 - Goal: demonstrative interactive login system with secure coding defaults.
-- Language: Python 3.11, no external deps.
-- Components: CLI, SQLite store, crypto helpers (PBKDF2, TOTP).
+- Language: Python 3.11, CustomTkinter for modern GUI.
+- Components: GUI, SQLite store, crypto helpers (PBKDF2, TOTP).
 
 ---
 
 ## Slide 2 – Architecture & Data Flow
-- User interacts with CLI (register/login).
+- User interacts with GUI (register/login) built with CustomTkinter.
 - Database layer (`database.py`) initialized with safe pragmas; all queries parameterized.
 - Crypto layer (`crypto.py`) handles salts, hashing, Base32 secrets, and TOTP generation/verification.
 - App layer (`app.py`) validates input, limits error leakage, and logs security-relevant events.

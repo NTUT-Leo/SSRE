@@ -13,7 +13,7 @@ This repository contains a minimal interactive authentication GUI demonstrating 
 ## Getting Started
 ### Requirements
 - Python 3.11+
-- No external dependencies required.
+- CustomTkinter (`pip install customtkinter`)
 
 ### Setup
 1. Create and activate a virtual environment (recommended):
@@ -21,7 +21,11 @@ This repository contains a minimal interactive authentication GUI demonstrating 
    python -m venv .venv
    source .venv/bin/activate
    ```
-2. Run the application:
+2. Install dependencies:
+   ```bash
+   pip install customtkinter
+   ```
+3. Run the application:
    ```bash
    python -m auth_system.app
    ```
@@ -55,7 +59,7 @@ Test coverage includes:
 ## Project Structure
 ```
 auth_system/
-  app.py           # Interactive GUI for register/login
+  app.py           # Interactive GUI using CustomTkinter
   crypto.py        # Password hashing and TOTP helpers
   database.py      # SQLite helpers with safe defaults
   test.py          # Security tests with colored output
